@@ -1,0 +1,11 @@
+.drop-area {
+  border: 2px dashed #888;
+  border-radius: 10px;
+  color: #888;
+  padding: 25px;
+  text-align: center;
+}
+
+input[type="text"] {
+  width: 20em;
+}
