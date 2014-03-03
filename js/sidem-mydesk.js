@@ -14,7 +14,7 @@ var SideMMyDesk;
 
   SideMMyDesk.prototype = {
     /** タイトル */
-    TITLE: 'SideM風会話ジェネレーター',
+    TITLE: 'SideM風会話ジェネレーター @saasan',
     /** 文字に使用するフォント */
     FONT: '"Lucida Grande", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif',
 
@@ -489,7 +489,7 @@ var SideMMyDesk;
      * ソースを描く
      */
     _drawSource: function() {
-      this._drawString(this.TITLE, this.BACKGROUND.WIDTH  - 1, this.BACKGROUND.HEIGHT  - 1, '12px ' + this.FONT, '#FFF', 'right', 'bottom');
+      this._drawString(this.TITLE, this.BACKGROUND.WIDTH  - 5, this.BACKGROUND.HEIGHT  - 2, '12px ' + this.FONT, '#FFF', 'right', 'bottom');
     },
 
     /**
@@ -524,7 +524,7 @@ var SideMMyDesk;
 
       // ソース
       this._drawSource();
- 
+
       return this;
     },
 
