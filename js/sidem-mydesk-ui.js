@@ -146,6 +146,25 @@ var SideMMyDeskUI;
     },
 
     /**
+     * MouseWheel
+     */
+    _onMouseWheel: function() {
+      var self = this;
+      return (function(evt) {
+        self._doNothing(evt);
+
+        var pos = self._getCursorPositionInCanvas(evt);
+        var frame = self.sidem.isPointInFrame(pos.x, pos.y);
+        var draggable = self.sidem.isDraggableFrame(frame);
+
+        if (draggable) {
+          var delta = Math.max(-1, Math.min(1, (evt.wheelDelta || -evt.detail)));
+          self.sidem.zoomFrame(frame, delta * 0.05);
+        }
+      });
+    },
+
+    /**
      * 名前が変更された時の処理を行う
      */
     _onChangeName: function() {
@@ -183,34 +202,36 @@ var SideMMyDeskUI;
      * ロード時の処理を行う
      */
     onLoad: function() {
-      var i, e, self = this;
+      var i, element, self = this;
 
       this.sidem = new SideMMyDesk();
 
       // キャンバスを初期化
-      e = document.getElementById('sidem-mydesk');
-      this.sidem.setCanvas(e).drawBase();
+      element = document.getElementById('sidem-mydesk');
+      this.sidem.setCanvas(element).drawBase();
 
       // ファイルのD&D用イベント
-      e.addEventListener('dragenter', this._doNothing, false);
-      e.addEventListener('dragover', this._doNothing, false);
-      e.addEventListener('drop', this._onDrop(), false);
+      element.addEventListener('dragenter', this._doNothing, false);
+      element.addEventListener('dragover', this._doNothing, false);
+      element.addEventListener('drop', this._onDrop(), false);
 
       // マウス系イベント
-      e.addEventListener('mousedown', this._onMouseDown(), false);
-      e.addEventListener('mouseup', this._onMouseUp(), false);
-      e.addEventListener('mousemove', this._onMouseMove(), false);
+      element.addEventListener('mousedown', this._onMouseDown(), false);
+      element.addEventListener('mouseup', this._onMouseUp(), false);
+      element.addEventListener('mousemove', this._onMouseMove(), false);
+      element.addEventListener('mousewheel', this._onMouseWheel(), false);
+      element.addEventListener('DOMMouseScroll', this._onMouseWheel(), false);
 
       // 名前の設定
-      e = document.querySelectorAll('input.name');
-      for (i = 0; i < e.length; i++) {
-        e[i].addEventListener('input', this._onChangeName(), false);
+      element = document.querySelectorAll('input.name');
+      for (i = 0; i < element.length; i++) {
+        element[i].addEventListener('input', this._onChangeName(), false);
       }
 
       // 台詞の設定
-      e = document.querySelectorAll('input.line');
-      for (i = 0; i < e.length; i++) {
-        e[i].addEventListener('input', this._onChangeLine(), false);
+      element = document.querySelectorAll('input.line');
+      for (i = 0; i < element.length; i++) {
+        element[i].addEventListener('input', this._onChangeLine(), false);
       }
     }
   };
