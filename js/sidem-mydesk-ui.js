@@ -14,7 +14,13 @@ var SideMMyDeskUI;
 
   SideMMyDeskUI.prototype = {
     /** SideMMyDesk */
-    sidem : null,
+    sidem: null,
+    /** ドラッグ中か */
+    dragging: null,
+    /** 以前のカーソルX座標 */
+    prevX: 0,
+    /** 以前のカーソルY座標 */
+    prevY: 0,
 
     /**
      * D&Dのデフォルトの動作をキャンセルする
@@ -68,27 +74,74 @@ var SideMMyDeskUI;
         self._doNothing(evt);
 
         // ドロップされた座標を調べる
-        var rect = evt.target.getBoundingClientRect();
-        var x = evt.clientX - rect.left;
-        var y = evt.clientY - rect.top;
+        var pos = self._getCursorPositionInCanvas(evt);
         // ドロップされた場所のコマを得る
-        var n = self.sidem.isPointInFrame(x, y);
-
-        document.getElementById('message').textContent = 'pos: ' + x + ', ' + y + ' - ' + n;
+        var frame = self.sidem.isPointInFrame(pos.x, pos.y);
 
         // ドロップされた場所がコマ外なら終了
-        if (n === null) return;
+        if (frame === null) return;
 
         var dt = evt.dataTransfer;
         var image = new Image();
 
         // 画像の読み込みが完了したら設定する
         image.addEventListener('load', function() {
-          self.sidem.setImage(n, image);
+          self.sidem.setImage(frame, image);
         }, false);
 
         // 画像を取得する
         self._getImage(dt, image);
+      });
+    },
+
+    /**
+     * MouseDown
+     */
+    _onMouseDown: function() {
+      var self = this;
+      return (function(evt) {
+        var pos = self._getCursorPositionInCanvas(evt);
+        var frame = self.sidem.isPointInFrame(pos.x, pos.y);
+        var draggable = self.sidem.isDraggableFrame(frame);
+
+        if (draggable) {
+          self.prevX = pos.x;
+          self.prevY = pos.y;
+          self.dragging = frame;
+        }
+      });
+    },
+
+    /**
+     * MouseUp
+     */
+    _onMouseUp: function() {
+      var self = this;
+      return (function() {
+        self.dragging = null;
+      });
+    },
+
+    /**
+     * MouseMove
+     */
+    _onMouseMove: function() {
+      var self = this;
+      return (function(evt) {
+        var pos = self._getCursorPositionInCanvas(evt);
+
+        if (self.dragging === null) {
+          // マウスカーソルの位置によってカーソルの形状を変更
+          var draggable = self.sidem.isDraggablePosition(pos.x, pos.y);
+          this.style.cursor = (draggable ? 'move' : 'auto');
+        }
+        else {
+          var deltaX = pos.x - self.prevX;
+          var deltaY = pos.y - self.prevY;
+          self.prevX = pos.x;
+          self.prevY = pos.y;
+          self.sidem.moveFramePosition(self.dragging, deltaX, deltaY);
+        }
       });
     },
 
@@ -98,8 +151,8 @@ var SideMMyDeskUI;
     _onChangeName: function() {
       var self = this;
       return (function() {
-        var n = parseInt(this.dataset.number, 10);
-        self.sidem.setName(n, this.value);
+        var frame = parseInt(this.dataset.number, 10);
+        self.sidem.setName(frame, this.value);
       });
     },
 
@@ -109,35 +162,44 @@ var SideMMyDeskUI;
     _onChangeLine: function(evt) {
       var self = this;
       return (function() {
-        var n = parseInt(this.dataset.number, 10);
-        self.sidem.setLine(n, this.value);
+        var frame = parseInt(this.dataset.number, 10);
+        self.sidem.setLine(frame, this.value);
       });
+    },
+
+    /**
+     * canvas内でのカーソル位置を取得する
+     * @return {Object} x,y座標が入ったオブジェクト
+     */
+    _getCursorPositionInCanvas: function(evt) {
+      var rect = evt.target.getBoundingClientRect();
+      var x = evt.clientX - rect.left;
+      var y = evt.clientY - rect.top;
+
+      return {'x': x, 'y': y};
     },
 
     /**
      * ロード時の処理を行う
      */
     onLoad: function() {
-      var i, e;
+      var i, e, self = this;
 
       this.sidem = new SideMMyDesk();
 
       // キャンバスを初期化
       e = document.getElementById('sidem-mydesk');
       this.sidem.setCanvas(e).drawBase();
-  /*
-        e.addEventListener('mousemove', function(e){
-        var rect = e.target.getBoundingClientRect();
-        var x = e.clientX - rect.left;
-        var y = e.clientY - rect.top;
 
-        document.getElementById('message').textContent = 'pos: ' + x + ', ' + y + ' - ' + this.sidem.isPointInFrame(x, y);
-      }, false);
-  */
-      // D&Dの設定
+      // ファイルのD&D用イベント
       e.addEventListener('dragenter', this._doNothing, false);
       e.addEventListener('dragover', this._doNothing, false);
       e.addEventListener('drop', this._onDrop(), false);
+
+      // マウス系イベント
+      e.addEventListener('mousedown', this._onMouseDown(), false);
+      e.addEventListener('mouseup', this._onMouseUp(), false);
+      e.addEventListener('mousemove', this._onMouseMove(), false);
 
       // 名前の設定
       e = document.querySelectorAll('input.name');

@@ -187,31 +187,41 @@ var SideMMyDesk;
         data: null,
         width: 0,
         height: 0,
-        ratio: 1
+        ratio: 1,
+        x: 0,
+        y: 0
       },
       {
         data: null,
         width: 0,
         height: 0,
-        ratio: 1
+        ratio: 1,
+        x: 0,
+        y: 0
       },
       {
         data: null,
         width: 0,
         height: 0,
-        ratio: 1
+        ratio: 1,
+        x: 0,
+        y: 0
       },
       {
         data: null,
         width: 0,
         height: 0,
-        ratio: 1
+        ratio: 1,
+        x: 0,
+        y: 0
       },
       {
         data: null,
         width: 0,
         height: 0,
-        ratio: 1
+        ratio: 1,
+        x: 0,
+        y: 0
       }
     ],
 
@@ -439,9 +449,9 @@ var SideMMyDesk;
 
     /**
      * 空白のコマを描く
-     * @param {number} n 描くコマの番号(zero-based)
+     * @param {number} frame 描くコマの番号(zero-based)
      */
-    _drawWhiteFrame: function(n) {
+    _drawWhiteFrame: function(frame) {
       this.ctx.save();
 
       this.ctx.fillStyle = 'white';
@@ -449,35 +459,35 @@ var SideMMyDesk;
       var charCode = '①'.charCodeAt(0);
 
       // 白で塗り潰す
-      this._fillPolygon(this.FRAMES[n].CORNER);
+      this._fillPolygon(this.FRAMES[frame].CORNER);
       // コマ番号
-      this._drawString(String.fromCharCode(charCode + n), this.FRAMES[n].CENTER[0], this.FRAMES[n].CENTER[1], '50px ' + this.FONT, '#888', 'center', 'middle');
+      this._drawString(String.fromCharCode(charCode + frame), this.FRAMES[frame].CENTER[0], this.FRAMES[frame].CENTER[1], '50px ' + this.FONT, '#888', 'center', 'middle');
 
       this.ctx.restore();
     },
 
     /**
      * コマを描く
-     * @param {number} n 描くコマの番号(zero-based)
+     * @param {number} frame 描くコマの番号(zero-based)
      */
-    _drawFrame: function(n) {
+    _drawFrame: function(frame) {
       // データが無ければ空白のコマを描く
-      if (!this.images[n].data) {
-        this._drawWhiteFrame(n);
+      if (!this.images[frame].data) {
+        this._drawWhiteFrame(frame);
         return;
       }
 
       // 縮小したサイズ
-      var w = this.images[n].width * this.images[n].ratio;
-      var h = this.images[n].height * this.images[n].ratio;
+      var w = this.images[frame].width * this.images[frame].ratio;
+      var h = this.images[frame].height * this.images[frame].ratio;
 
       this.ctx.save();
 
-      this._clipPolygon(this.FRAMES[n].CORNER);
+      this._clipPolygon(this.FRAMES[frame].CORNER);
       this.ctx.drawImage(
-        this.images[n].data,
-        this.FRAMES[n].IMAGE_CENTER[0] - (w / 2),
-        this.FRAMES[n].IMAGE_CENTER[1] - (h / 2),
+        this.images[frame].data,
+        this.images[frame].x - (w / 2),
+        this.images[frame].y - (h / 2),
         w,
         h
       );
@@ -555,12 +565,12 @@ var SideMMyDesk;
 
     /**
      * 画像を設定する
-     * @param {number} n 設定するコマの番号(zero-based)
+     * @param {number} frame 設定するコマの番号(zero-based)
      * @param {Image} image 画像
      */
-    setImage: function(n, image) {
-      var w = this.images[n].width = image.width;
-      var h = this.images[n].height = image.height;
+    setImage: function(frame, image) {
+      var w = this.images[frame].width = image.width;
+      var h = this.images[frame].height = image.height;
       var r = 1;
 
       // サイズが大きければ縮小
@@ -568,8 +578,10 @@ var SideMMyDesk;
         r = 400 / h;
       }
 
-      this.images[n].data = image;
-      this.images[n].ratio = r;
+      this.images[frame].data = image;
+      this.images[frame].ratio = r;
+      this.images[frame].x = this.FRAMES[frame].IMAGE_CENTER[0];
+      this.images[frame].y = this.FRAMES[frame].IMAGE_CENTER[1];
 
       this.draw();
 
@@ -578,11 +590,11 @@ var SideMMyDesk;
 
     /**
      * 名前を設定する
-     * @param {number} n 設定するコマの番号(zero-based)
+     * @param {number} frame 設定するコマの番号(zero-based)
      * @param {string} name 名前
      */
-    setName: function(n, name) {
-      this.names[n] = name;
+    setName: function(frame, name) {
+      this.names[frame] = name;
       this.draw();
 
       return this;
@@ -590,11 +602,11 @@ var SideMMyDesk;
 
     /**
      * 台詞を設定する
-     * @param {number} n 設定するコマの番号(zero-based)
+     * @param {number} frame 設定するコマの番号(zero-based)
      * @param {string} line 台詞
      */
-    setLine: function(n, line) {
-      this.lines[n] = line;
+    setLine: function(frame, line) {
+      this.lines[frame] = line;
       this.draw();
 
       return this;
@@ -621,6 +633,54 @@ var SideMMyDesk;
 
       this.ctx.restore();
       return result;
+    },
+
+    /**
+     * 指定した座標がドラッグ可能か確認する
+     * @param {number} x X座標
+     * @param {number} y Y座標
+     * @return {boolean} ドラッグ可能ならtrue。そうでなければfalse。
+     */
+    isDraggablePosition: function(x, y) {
+      var frame = this.isPointInFrame(x, y);
+      if (frame === null) {
+        return false;
+      }
+      return (this.images[frame].data !== null);
+    },
+
+    /**
+     * 指定したコマがドラッグ可能か確認する
+     * @param {number} frame コマの番号(zero-based)
+     * @return {boolean} ドラッグ可能ならtrue。そうでなければfalse。
+     */
+    isDraggableFrame: function(frame) {
+      return (this.images[frame].data !== null);
+    },
+
+    /**
+     * コマを移動する
+     * @param {number} frame コマの番号(zero-based)
+     * @param {number} x X方向の移動距離
+     * @param {number} y Y方向の移動距離
+     */
+    moveFramePosition: function(frame, x, y) {
+      this.images[frame].x += x;
+      this.images[frame].y += y;
+      this.draw();
+    },
+
+    /**
+     * コマを拡大縮小する
+     * @param {number} frame コマの番号(zero-based)
+     * @param {number} inout マイナスで縮小/プラスで拡大
+     */
+    zoomFrame: function(frame, inout) {
+      var newRatio = this.images[frame].ratio + inout;
+      if (newRatio > 0) {
+        this.images[frame].ratio = newRatio;
+      }
+      this.draw();
     }
   };
 })();
