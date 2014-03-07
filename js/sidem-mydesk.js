@@ -1,4 +1,4 @@
-/* jshint indent: 2 */
+/* jshint indent: 2, browser: true */
 
 var SideMMyDesk;
 
@@ -14,7 +14,7 @@ var SideMMyDesk;
 
   SideMMyDesk.prototype = {
     /** タイトル */
-    TITLE: 'SideM風会話ジェネレーター @saasan',
+    TITLE: 'SideM風会話ジェネレーター ' + document.URL,
     /** 文字に使用するフォント */
     FONT: '"Lucida Grande", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif',
 
