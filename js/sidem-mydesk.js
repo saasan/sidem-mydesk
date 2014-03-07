@@ -62,10 +62,12 @@ var SideMMyDesk;
       },
       /** 名前 */
       NAME: {
+        /** フォントサイズ(px) */
+        FONT_SIZE: 20,
         /** 左 */
         LEFT: 16,
-        /** 上 */
-        TOP: 14,
+        /** ベースライン */
+        BASELINE: 28,
         /** 影 */
         SHADOW: {
           LIGHT:{
@@ -90,10 +92,12 @@ var SideMMyDesk;
       },
       /** 台詞 */
       LINE: {
+        /** フォントサイズ(px) */
+        FONT_SIZE: 26,
         /** 左 */
         LEFT: 16,
-        /** 上 */
-        TOP: 49,
+        /** ベースライン */
+        BASELINE: 16,
         /** 影 */
         SHADOW: {
           LIGHT:{
@@ -386,7 +390,7 @@ var SideMMyDesk;
       this.ctx.shadowBlur = this.BALLOON.NAME.SHADOW.DARK.BLUR;
       this.ctx.shadowOffsetX = this.BALLOON.NAME.SHADOW.DARK.OFFSET.X;
       this.ctx.shadowOffsetY = this.BALLOON.NAME.SHADOW.DARK.OFFSET.Y;
-      this._drawString(name, BalloonLeft + this.BALLOON.NAME.LEFT, BalloonTop + this.BALLOON.NAME.TOP, 'bold 20px ' + this.FONT, 'white', 'left', 'top');
+      this._drawString(name, BalloonLeft + this.BALLOON.NAME.LEFT, BalloonTop + this.BALLOON.NAME.BASELINE, 'bold ' + this.BALLOON.NAME.FONT_SIZE + 'px ' + this.FONT, 'white', 'left');
 
       this.ctx.restore();
       this.ctx.save();
@@ -396,7 +400,7 @@ var SideMMyDesk;
       this.ctx.shadowBlur = this.BALLOON.NAME.SHADOW.LIGHT.BLUR;
       this.ctx.shadowOffsetX = this.BALLOON.NAME.SHADOW.LIGHT.OFFSET.X;
       this.ctx.shadowOffsetY = this.BALLOON.NAME.SHADOW.LIGHT.OFFSET.Y;
-      this._drawString(name, BalloonLeft + this.BALLOON.NAME.LEFT, BalloonTop + this.BALLOON.NAME.TOP, 'bold 20px ' + this.FONT, color, 'left', 'top');
+      this._drawString(name, BalloonLeft + this.BALLOON.NAME.LEFT, BalloonTop + this.BALLOON.NAME.BASELINE, 'bold ' + this.BALLOON.NAME.FONT_SIZE + 'px ' + this.FONT, color, 'left');
 
       this.ctx.restore();
     },
@@ -404,7 +408,7 @@ var SideMMyDesk;
     /**
      * 台詞を描く
      */
-    _drawLine: function(BalloonLeft, BalloonTop, line, color) {
+    _drawLine: function(BalloonLeft, BalloonBottom, line, color) {
       if (typeof line === null) return;
 
       this.ctx.save();
@@ -414,7 +418,7 @@ var SideMMyDesk;
       this.ctx.shadowBlur = this.BALLOON.LINE.SHADOW.DARK.BLUR;
       this.ctx.shadowOffsetX = this.BALLOON.LINE.SHADOW.DARK.OFFSET.X;
       this.ctx.shadowOffsetY = this.BALLOON.LINE.SHADOW.DARK.OFFSET.Y;
-      this._drawString(line, BalloonLeft + this.BALLOON.LINE.LEFT, BalloonTop + this.BALLOON.LINE.TOP, 'bold 26px ' + this.FONT, 'white', 'left', 'top');
+      this._drawString(line, BalloonLeft + this.BALLOON.LINE.LEFT, BalloonBottom - this.BALLOON.LINE.BASELINE, 'bold ' + this.BALLOON.LINE.FONT_SIZE + 'px ' + this.FONT, 'white', 'left');
 
       this.ctx.restore();
       this.ctx.save();
@@ -424,7 +428,7 @@ var SideMMyDesk;
       this.ctx.shadowBlur = this.BALLOON.LINE.SHADOW.LIGHT.BLUR;
       this.ctx.shadowOffsetX = this.BALLOON.LINE.SHADOW.LIGHT.OFFSET.X;
       this.ctx.shadowOffsetY = this.BALLOON.LINE.SHADOW.LIGHT.OFFSET.Y;
-      this._drawString(line, BalloonLeft + this.BALLOON.LINE.LEFT, BalloonTop + this.BALLOON.LINE.TOP, 'bold 26px ' + this.FONT, color, 'left', 'top');
+      this._drawString(line, BalloonLeft + this.BALLOON.LINE.LEFT, BalloonBottom - this.BALLOON.LINE.BASELINE, 'bold ' + this.BALLOON.LINE.FONT_SIZE + 'px ' + this.FONT, color, 'left');
 
       this.ctx.restore();
     },
@@ -435,7 +439,7 @@ var SideMMyDesk;
     _drawTopBalloon: function() {
       this._drawBalloon(this.TOP_BALLOON.LEFT, this.TOP_BALLOON.TOP, this.TOP_BALLOON.ARROW.LEFT, this.TOP_BALLOON.ARROW.TOP, this.TOP_BALLOON.COLOR);
       this._drawName(this.TOP_BALLOON.LEFT, this.TOP_BALLOON.TOP, this.names[0], this.TOP_BALLOON.COLOR);
-      this._drawLine(this.TOP_BALLOON.LEFT, this.TOP_BALLOON.TOP, this.lines[0], 'black');
+      this._drawLine(this.TOP_BALLOON.LEFT, this.TOP_BALLOON.TOP + this.BALLOON.HEIGHT, this.lines[0], 'black');
     },
 
     /**
@@ -444,7 +448,7 @@ var SideMMyDesk;
     _drawBottomBalloon: function() {
       this._drawBalloon(this.BOTTOM_BALLOON.LEFT, this.BOTTOM_BALLOON.TOP, this.BOTTOM_BALLOON.ARROW.LEFT, this.BOTTOM_BALLOON.ARROW.TOP, this.BOTTOM_BALLOON.COLOR);
       this._drawName(this.BOTTOM_BALLOON.LEFT, this.BOTTOM_BALLOON.TOP, this.names[1], this.BOTTOM_BALLOON.COLOR);
-      this._drawLine(this.BOTTOM_BALLOON.LEFT, this.BOTTOM_BALLOON.TOP, this.lines[1], 'black');
+      this._drawLine(this.BOTTOM_BALLOON.LEFT, this.BOTTOM_BALLOON.TOP + this.BALLOON.HEIGHT, this.lines[1], 'black');
     },
 
     /**
@@ -655,7 +659,7 @@ var SideMMyDesk;
      * @return {boolean} ドラッグ可能ならtrue。そうでなければfalse。
      */
     isDraggableFrame: function(frame) {
-      return (this.images[frame].data !== null);
+      return (typeof this.images[frame] !== 'undefined' && this.images[frame].data !== null);
     },
 
     /**

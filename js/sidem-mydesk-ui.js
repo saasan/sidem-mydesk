@@ -102,6 +102,10 @@ var SideMMyDeskUI;
       return (function(evt) {
         var pos = self._getCursorPositionInCanvas(evt);
         var frame = self.sidem.isPointInFrame(pos.x, pos.y);
+
+        // コマ外なら終了
+        if (frame === null) return;
+
         var draggable = self.sidem.isDraggableFrame(frame);
 
         if (draggable) {
@@ -155,6 +159,10 @@ var SideMMyDeskUI;
 
         var pos = self._getCursorPositionInCanvas(evt);
         var frame = self.sidem.isPointInFrame(pos.x, pos.y);
+
+        // コマ外なら終了
+        if (frame === null) return;
+
         var draggable = self.sidem.isDraggableFrame(frame);
 
         if (draggable) {
