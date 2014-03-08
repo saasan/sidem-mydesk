@@ -6,7 +6,7 @@ var SideMMyDeskUI;
   'use strict';
 
   /**
-   * SideMマイデスク風ジェネレーターのUI
+   * SideMマイデスク風ジェネレータのUI
    * @constructor
    */
   SideMMyDeskUI = function() {

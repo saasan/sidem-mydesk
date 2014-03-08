@@ -6,7 +6,7 @@ var SideMMyDesk;
   'use strict';
 
   /**
-   * SideMマイデスク風ジェネレーター
+   * SideMマイデスク風ジェネレータ
    * @constructor
    */
   SideMMyDesk = function() {
@@ -14,7 +14,7 @@ var SideMMyDesk;
 
   SideMMyDesk.prototype = {
     /** タイトル */
-    TITLE: 'SideM風会話ジェネレーター ' + document.URL,
+    TITLE: 'SideM風会話ジェネレータ ' + document.URL,
     /** 文字に使用するフォント */
     FONT: '"Lucida Grande", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif',
 
