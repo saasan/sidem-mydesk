@@ -6,7 +6,7 @@ var SideMMyDeskUI;
   'use strict';
 
   /**
-   * SideMマイデスク風ジェネレータのUI
+   * SideM風会話ジェネレータのUI
    * @constructor
    */
   SideMMyDeskUI = function() {
@@ -15,7 +15,7 @@ var SideMMyDeskUI;
   SideMMyDeskUI.prototype = {
     /** SideMMyDesk */
     sidem: null,
-    /** ドラッグ中か */
+    /** ドラッグ中のコマ番号。ドラッグ中でなければnull。 */
     dragging: null,
     /** 以前のカーソルX座標 */
     prevX: 0,

@@ -6,7 +6,7 @@ var SideMMyDesk;
   'use strict';
 
   /**
-   * SideMマイデスク風ジェネレータ
+   * SideM風会話ジェネレータ
    * @constructor
    */
   SideMMyDesk = function() {
