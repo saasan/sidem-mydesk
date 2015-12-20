@@ -4,48 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>SideM風会話ジェネレータ</title>
-    <link rel="apple-touch-icon" href="//saasan.github.io/img/s2works_favicon.png">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <script src="//platform.twitter.com/widgets.js"></script>
     <script src="js/sidem-mydesk.js"></script>
     <script src="js/sidem-mydesk-ui.js"></script>
     <script src="js/init.js"></script>
   </head>
   <body>
-    <div class="container">
-      <section>
-        <fieldset>
-          <legend>上の人</legend>
-          <label class="col-sm-4">
-            名前
-            <input type="text" class="form-control name" data-number="0">
-          </label>
-          <label class="col-sm-8">
-            台詞
-            <input type="text" class="form-control line" data-number="0">
-          </label>
-        </fieldset>
+    <section>
+      <fieldset>
+        <legend>上の人</legend>
+        <label>
+          名前
+          <input type="text" class="name" data-number="0">
+        </label>
+        <label>
+          台詞
+          <input type="text" class="line" data-number="0">
+        </label>
+      </fieldset>
 
-        <fieldset>
-          <legend>下の人</legend>
-          <label class="col-sm-4">
-            名前
-            <input type="text" class="form-control name" data-number="1">
-          </label>
-          <label class="col-sm-8">
-            台詞
-            <input type="text" class="form-control line" data-number="1">
-          </label>
-        </fieldset>
-      </section>
+      <fieldset>
+        <legend>下の人</legend>
+        <label>
+          名前
+          <input type="text" class="name" data-number="1">
+        </label>
+        <label>
+          台詞
+          <input type="text" class="line" data-number="1">
+        </label>
+      </fieldset>
+    </section>
 
-      <section class="well">
-        <p><canvas id="sidem-mydesk" width="640" height="586" class="center-block">canvasに対応したブラウザーでご覧下さい。</canvas></p>
-        <p><button id="output" class="btn btn-primary center-block">↓保存用画像を出力する↓</button></p>
-        <p id="result"></p>
-      </section>
-    </div>
+    <section class="well center">
+      <p><canvas id="sidem-mydesk" width="640" height="586">canvasに対応したブラウザーでご覧下さい。</canvas></p>
+      <p><button id="output">↓保存用画像を出力する↓</button></p>
+      <p id="result"></p>
+    </section>
   </body>
 </html>
