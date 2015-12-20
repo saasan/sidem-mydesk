@@ -9,29 +9,35 @@
     <script src="js/init.js"></script>
   </head>
   <body>
-    <section>
+    <section class="sidem-mydesk-form">
       <fieldset>
         <legend>上の人</legend>
-        <label>
-          名前
-          <input type="text" class="name" data-number="0">
+        <label class="block">
+          <input type="checkbox" class="balloonVisible" data-number="0" checked> 吹き出しを表示する
         </label>
-        <label>
-          台詞
-          <input type="text" class="line" data-number="0">
-        </label>
+
+        <div class="flex">
+          <label for="name0">名前：</label>
+          <input type="text" class="name" data-number="0" id="name0">
+
+          <label for="line0">台詞：</label>
+          <input type="text" class="line" data-number="0" id="line0">
+        </div>
       </fieldset>
 
       <fieldset>
         <legend>下の人</legend>
         <label>
-          名前
-          <input type="text" class="name" data-number="1">
+          <input type="checkbox" class="balloonVisible" data-number="1" checked> 吹き出しを表示する
         </label>
-        <label>
-          台詞
-          <input type="text" class="line" data-number="1">
-        </label>
+
+        <div class="flex">
+          <label for="name1">名前：</label>
+          <input type="text" class="name" data-number="1" id="name1">
+
+          <label for="line1">台詞：</label>
+          <input type="text" class="line" data-number="1" id="line1">
+        </div>
       </fieldset>
     </section>
 
