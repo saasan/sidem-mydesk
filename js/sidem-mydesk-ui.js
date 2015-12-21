@@ -167,7 +167,6 @@ var SideMMyDeskUI;
       var self = this;
       return (function() {
         var frame = parseInt(this.dataset.number, 10);
-        console.log('_onChangeBalloonVisible: ' + frame + ', ' + this.checked);
         self.sidem.setBalloonVisible(frame, this.checked);
       });
     },
